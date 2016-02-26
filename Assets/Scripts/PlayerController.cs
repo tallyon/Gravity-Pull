@@ -255,7 +255,13 @@ public class PlayerController : MonoBehaviour
         // Turn on invincibility frame for 1 sec
         Invoke("EndInvincibilityFrame", .5f);
 
-        Debug.Log("Collided with " + col.collider.name);
+        // If collided with wall apply force aligned with vertical direction of normal of the wall surface
+        if(col.transform.tag == "Wall")
+        {
+            Vector3 colNormal = col.contacts[0].normal;
+            Vector3 bounceForce = new Vector3(10 * Mathf.Sign(colNormal.x), 0, 0);
+            rbd.AddForce(bounceForce, ForceMode.VelocityChange);
+        }
     }
 
     private void EndInvincibilityFrame()
