@@ -1,11 +1,9 @@
-﻿using System.Diagnostics;
+﻿using UnityEngine;
 
 namespace Assets.Scripts
 {
     public class LevelTimer
     {
-        private Stopwatch watch;
-
         // Singleton
         private static LevelTimer instance;
         public static LevelTimer Instance
@@ -18,92 +16,74 @@ namespace Assets.Scripts
             }
         }
 
-        private long timeMSElapsedWhenStopped;
-        public long MSElapsed
-        {
-            get
-            {
-                if (IsRunning)
-                    return watch.ElapsedMilliseconds;
-                else
-                    return timeMSElapsedWhenStopped;
-            }
-        }
+        public long MSElapsed { get; set; }
 
-        public bool isRunning;
-        public bool IsRunning
-        {
-            get { return isRunning; }
-            protected set
-            {
-                isRunning = value;
-                if (value == false)
-                    timeMSElapsedWhenStopped = watch.ElapsedMilliseconds;
-            }
-        }
+        public bool IsRunning { get; protected set; }
 
         /// <summary>
         /// Create new LevelTimer object.
         /// </summary>
         private LevelTimer()
         {
-            watch = new Stopwatch();
-            //Force the timer to be explicitly started so it won't stay stopped when level is restarted
-            //Start();
-        }
-
-        /// <summary>
-        /// Starts the watch without reseting the time passed.
-        /// </summary>
-        public void Start()
-        {
-            watch.Start();
-            IsRunning = true;
-
-            // Subscribe to the GameOver event in PlayerController and stop timer when it fires
+            // Subscribe to the event that is called every frame in UITimerController.Update() function due to not inheriting from MonoBehaviour
+            UITimerController.UpdateThis += Update;
+            // Subscribe to the GameOver event in PlayerController and stop the timer when it fires
             PlayerController.CallOnGameOver += OnGameOver;
         }
 
         /// <summary>
-        /// Pauses the watch without reseting the time passed.
+        /// Gets called in and Update() function in another script that inherits from MonoBehaviour
         /// </summary>
-        public void Pause()
+        private void Update()
         {
-            watch.Stop();
-            IsRunning = false;
+            if (IsRunning)
+                MSElapsed += (long)(Time.deltaTime * 1000);
         }
 
         /// <summary>
-        /// Stops and resets the watch.
+        /// Starts the timer without resetting the time passed.
         /// </summary>
-        public void Reset()
-        {
-            watch.Stop();
-            watch.Reset();
-            IsRunning = false;
-        }
-
-        /// <summary>
-        /// Stops, resets and starts the watch.
-        /// </summary>
-        public void Restart()
+        public void Start()
         {
             Reset();
-            watch.Start();
             IsRunning = true;
         }
 
         /// <summary>
-        /// Stops and resets the watch and returns time in milliseconds that elapsed.
+        /// Pauses the timer without resetting the time passed.
+        /// </summary>
+        public void Pause()
+        {
+            //watch.Stop();
+            IsRunning = false;
+        }
+
+        /// <summary>
+        /// Stops and resets the timer.
+        /// </summary>
+        public void Reset()
+        {
+            MSElapsed = 0;
+            IsRunning = false;
+        }
+
+        /// <summary>
+        /// Stops, resets and starts the timer.
+        /// </summary>
+        public void Restart()
+        {
+            Reset();
+            IsRunning = true;
+        }
+
+        /// <summary>
+        /// Stops, resets the timer and returns time in milliseconds that elapsed.
         /// </summary>
         /// <returns>Time elapsed (ms)</returns>
         public long Stop()
         {
-            watch.Stop();
             IsRunning = false;
-            long timeMSElapsed = watch.ElapsedMilliseconds;
-            watch.Reset();
-            return timeMSElapsed;
+            return MSElapsed;
         }
 
         private void OnGameOver()

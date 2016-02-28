@@ -1,12 +1,14 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using Assets.Scripts;
-using System.Diagnostics;
 
 public class UITimerController : MonoBehaviour
 {
     private Text timerText;
     private LevelTimer levelTimer;
+
+    public delegate void UpdateHandler();
+    public static event UpdateHandler UpdateThis;
 
     // Use this for initialization
     void Start()
@@ -29,6 +31,9 @@ public class UITimerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (UpdateThis != null)
+            UpdateThis();
+
         if (levelTimer.IsRunning)
             timerText.text = levelTimer.ToString();
     }
