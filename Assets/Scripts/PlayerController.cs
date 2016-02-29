@@ -15,6 +15,7 @@ public class PlayerController : MonoBehaviour
     private GravityField gravityField;
 
     private Rigidbody rbd;
+    private BoxCollider boxCollider;
     private Vector3 newMousePosition;
 
     [SerializeField]
@@ -66,7 +67,7 @@ public class PlayerController : MonoBehaviour
         //trail = FindObjectOfType<TrailGeneration>();
         //trajectory = transform.GetComponentInChildren<LineRenderer>();
 
-
+        boxCollider = GetComponent<BoxCollider>();
         rbd = GetComponent<Rigidbody>();
         Health = MaxHealth = 100;
 
@@ -74,7 +75,21 @@ public class PlayerController : MonoBehaviour
         gravityField = new GravityField(transform.position, 500, 20);
 
         // Subscribe to event that fires when trail is completed
-        TrailGeneration.CallOnTrailCompleted += OnTrailCompleted;
+        TrailController.CallOnTrailCompleted += OnTrailCompleted;
+
+        // Show appropriate popup for the level
+        switch (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name)
+        {
+            case "Level01":
+                UIBehaviour.PopupText(Vector3.zero, "Small obstacles can be easily moved by gravitational attraction, use it to move them away!\n[Touch the screen]", Color.yellow);
+                break;
+            case "Level02":
+                UIBehaviour.PopupText(Vector3.zero, "Moving platforms cannot be attracted by gravity - dodge them!", Color.yellow);
+                break;
+            case "Level03":
+                UIBehaviour.PopupText(Vector3.zero, "Level not implemented - loaded Level01", Color.yellow);
+                break;
+        }
     }
 
     void Update()
@@ -213,6 +228,9 @@ public class PlayerController : MonoBehaviour
 
         // There is need for distinguishing between negative, zero and positive sign: negative = -1, zero = 0, positive = 1
         horizontalAxisSignInLastFrame = horizontalAxis == 0 ? 0 : Mathf.Sign(horizontalAxis);
+
+        // Freeze rigidbody rotation to 0
+        rbd.MoveRotation(Quaternion.identity);
     }
 
     //private void MoveAlongTrajectory(TrailGeneration trail)
@@ -245,6 +263,7 @@ public class PlayerController : MonoBehaviour
     }
 
     #region Collision
+    // Collision should happen only with walls, all the other obstacles are triggers
     void OnCollisionEnter(Collision col)
     {
         if (invincibilityFrame)
@@ -252,11 +271,12 @@ public class PlayerController : MonoBehaviour
 
         Health -= 10;
         invincibilityFrame = true;
-        // Turn on invincibility frame for 1 sec
+        // Turn on invincibility frame for .5 sec - disable collider
+        boxCollider.enabled = false;
         Invoke("EndInvincibilityFrame", .5f);
 
         // If collided with wall apply force aligned with vertical direction of normal of the wall surface
-        if(col.transform.tag == "Wall")
+        if (col.transform.tag == "Wall")
         {
             Vector3 colNormal = col.contacts[0].normal;
             Vector3 bounceForce = new Vector3(10 * Mathf.Sign(colNormal.x), 0, 0);
@@ -264,8 +284,32 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    // Triggers are all obstacles except walls - hitting trigger obstacle makes player lose velocity
+    void OnTriggerEnter(Collider col)
+    {
+        if (invincibilityFrame)
+            return;
+
+
+        if (col.tag == "Platform")
+        {
+            Health -= 10;
+            invincibilityFrame = true;
+            // Turn on invincibility frame for .5 sec - disable collider
+            boxCollider.enabled = false;
+            Invoke("EndInvincibilityFrame", .5f);
+
+            Vector3 bounceForce = new Vector3(0, -10, 0);
+            rbd.AddForce(bounceForce, ForceMode.VelocityChange);
+        }
+    }
+
+    /// <summary>
+    /// Enables collider and sets invincibility flag off
+    /// </summary>
     private void EndInvincibilityFrame()
     {
+        boxCollider.enabled = true;
         invincibilityFrame = false;
     }
     #endregion

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Assets.Scripts;
 
-public class TrailGeneration : MonoBehaviour, ITrailAdapter
+public class TrailController : MonoBehaviour, ITrailAdapter
 {
     private List<Transform> trailList = new List<Transform>();
     public List<Transform> TrailList
@@ -42,6 +42,7 @@ public class TrailGeneration : MonoBehaviour, ITrailAdapter
     public delegate void OnTrailPointAchieved(int current, int max);
     public static event OnTrailPointAchieved CallOnTrailPointAchieved;
 
+    [SerializeField]
     private GameObject UISummary;
 
     public delegate void OnTrailCompleted(ScoreType score);
@@ -50,7 +51,10 @@ public class TrailGeneration : MonoBehaviour, ITrailAdapter
     [SerializeField]
     private bool drawTrailLines;
     private LevelTimer levelTimer;
+    [SerializeField]
     private PlayerController player;
+    [SerializeField]
+    private CameraFollowPlayer cameraFollowScript;
 
     void Awake()
     {
@@ -60,8 +64,12 @@ public class TrailGeneration : MonoBehaviour, ITrailAdapter
 
     void Start()
     {
-        player = FindObjectOfType<PlayerController>();
-        UISummary = FindObjectOfType<UISummary>().gameObject;
+        if (player == null)
+            player = FindObjectOfType<PlayerController>();
+        if (UISummary == null)
+            UISummary = FindObjectOfType<UISummary>().gameObject;
+        if (cameraFollowScript == null)
+            cameraFollowScript = FindObjectOfType<CameraFollowPlayer>();
         GenerateTrailList();
         currentTrailPointIndex = 0;
         TrailPointAchieved(TrailList[0]);
@@ -121,7 +129,7 @@ public class TrailGeneration : MonoBehaviour, ITrailAdapter
 
         // If the trail point achieved is the first one - enable camera follow
         if (CurrentTrailPointIndex == 1)
-            FindObjectOfType<CameraFollowPlayer>().StartFollowing = true;
+            cameraFollowScript.StartFollowing = true;
 
         // Set next trail point if it wasn't the last one
         if (CurrentTrailPointIndex < TrailList.Count - 1)
@@ -157,6 +165,9 @@ public class TrailGeneration : MonoBehaviour, ITrailAdapter
             );
     }
 
+    /// <summary>
+    /// Prepare summary UI of the level, save score and send event that trail was completed.
+    /// </summary>
     private void TrailCompleted()
     {
         // Activate the summary
@@ -170,6 +181,6 @@ public class TrailGeneration : MonoBehaviour, ITrailAdapter
         if (CallOnTrailCompleted != null)
             CallOnTrailCompleted(score);
 
-        Debug.Log("TRAIL COMPLETED WITH SCORE: " + score.ToString());
+        //Debug.Log("TRAIL COMPLETED WITH SCORE: " + score.ToString());
     }
 }

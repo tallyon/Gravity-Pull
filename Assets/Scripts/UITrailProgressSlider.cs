@@ -4,17 +4,23 @@ using UnityEngine.UI;
 public class UITrailProgressSlider : MonoBehaviour
 {
     [SerializeField]
-    private TrailGeneration trailGeneration;
+    private TrailController trailController;
     [SerializeField]
     private Text lastTrailPoint, currentTrailPoint;
     private Slider slider;
 
     void Start()
     {
+        if (trailController == null)
+            trailController = FindObjectOfType<TrailController>();
+
         slider = GetComponent<Slider>();
         slider.interactable = false;
         // Subscribe to receive notifications when TrailPoint is achieved
-        TrailGeneration.CallOnTrailPointAchieved += TrailPointAchieved;
+        TrailController.CallOnTrailPointAchieved += TrailPointAchieved;
+        // Setup slider max value based on the number of elements in trail list and update UI text
+        slider.maxValue = trailController.TrailList.Count - 1;
+        lastTrailPoint.text = slider.maxValue.ToString();
     }
 
     private void TrailPointAchieved(int current, int max)

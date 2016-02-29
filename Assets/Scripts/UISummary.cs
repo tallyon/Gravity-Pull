@@ -4,15 +4,17 @@ using Assets.Scripts;
 
 public class UISummary : MonoBehaviour
 {
+    [SerializeField]
     private PlayerController player;
     [SerializeField]
     private Text timeText = null, healthText = null, scoreText = null;
 
     void Start()
     {
-        player = FindObjectOfType<PlayerController>();
+        if (player == null)
+            player = FindObjectOfType<PlayerController>();
         // Subscribe to TrailGeneration to call OnTrailCompleted when trail is completed
-        TrailGeneration.CallOnTrailCompleted += OnTrailCompleted;
+        TrailController.CallOnTrailCompleted += OnTrailCompleted;
         // Set starting position to off screen
         GetComponent<RectTransform>().localPosition = new Vector3(2000, 0, 0);
     }

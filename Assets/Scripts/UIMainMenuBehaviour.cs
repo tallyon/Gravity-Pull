@@ -23,7 +23,6 @@ public class UIMainMenuBehaviour : MonoBehaviour
 
     void Start()
     {
-        //float canvasWidth = FindObjectOfType<Canvas>().GetComponent<RectTransform>().rect.width;
         float canvasWidth = levelSelectPosition.x;
         uiOffscreenPosition.Set(canvasWidth, 0);
 

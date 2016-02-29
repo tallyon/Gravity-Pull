@@ -16,7 +16,7 @@ public class UITimerController : MonoBehaviour
         timerText = GetComponent<Text>();
         levelTimer = LevelTimer.Instance;
         // Subscribe to receive notifications when trail is completed
-        TrailGeneration.CallOnTrailCompleted += TrailCompleted;
+        TrailController.CallOnTrailCompleted += TrailCompleted;
     }
 
     /// <summary>

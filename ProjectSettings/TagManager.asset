@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Trail
   - Wall
+  - Platform
   layers:
   - Default
   - TransparentFX

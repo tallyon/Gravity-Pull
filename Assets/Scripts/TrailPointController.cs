@@ -2,7 +2,7 @@
 
 public class TrailPointController : MonoBehaviour
 {
-    public TrailGeneration trailGen;
+    public TrailController trailGen;
 
     // On player entering the trigger let TrailGeneration script know and decide which index of trail point was achieved
     void OnTriggerEnter(Collider col)
