@@ -3786,11 +3786,11 @@ Prefab:
       objectReference: {fileID: 1299902306}
     - target: {fileID: 22493074, guid: 24f4a683d89791540b315a5c1048fdd6, type: 2}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 22433876, guid: 24f4a683d89791540b315a5c1048fdd6, type: 2}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 11477948, guid: 24f4a683d89791540b315a5c1048fdd6, type: 2}
       propertyPath: m_FontData.m_BestFit
@@ -5518,8 +5518,12 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11479392, guid: 0ce617f1d96409544962910cb15d9e47, type: 2}
       propertyPath: invincibilityTime
-      value: 5
+      value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 11479392, guid: 0ce617f1d96409544962910cb15d9e47, type: 2}
+      propertyPath: rendererPlayer
+      value: 
+      objectReference: {fileID: 2075647922}
     m_RemovedComponents:
     - {fileID: 6526696, guid: 0ce617f1d96409544962910cb15d9e47, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: 0ce617f1d96409544962910cb15d9e47, type: 2}
@@ -6261,6 +6265,11 @@ MonoBehaviour:
   - {fileID: 391000728}
   index: 0
   cube: {fileID: 103147632}
+--- !u!23 &2075647922 stripped
+MeshRenderer:
+  m_PrefabParentObject: {fileID: 2300232, guid: 0ce617f1d96409544962910cb15d9e47,
+    type: 2}
+  m_PrefabInternal: {fileID: 1779381402}
 --- !u!4 &2092806152 stripped
 Transform:
   m_PrefabParentObject: {fileID: 469706, guid: 9be1196f6c20fac49958787367cc5569, type: 2}

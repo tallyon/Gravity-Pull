@@ -4,7 +4,6 @@ using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
-    // DEBUG
     [SerializeField]
     private Text verticalAcc = null, horizontalAcc = null;
     [SerializeField]
@@ -15,7 +14,8 @@ public class PlayerController : MonoBehaviour
     private GravityField gravityField;
 
     private Rigidbody rbd;
-    private BoxCollider boxCollider;
+    [SerializeField]
+    private Renderer rendererPlayer;
     private Vector3 newMousePosition;
 
     [SerializeField]
@@ -67,8 +67,8 @@ public class PlayerController : MonoBehaviour
     {
         //trail = FindObjectOfType<TrailGeneration>();
         //trajectory = transform.GetComponentInChildren<LineRenderer>();
-
-        boxCollider = GetComponent<BoxCollider>();
+        if (rendererPlayer == null)
+            rendererPlayer = GameObject.Find("Default").GetComponent<Renderer>();
         rbd = GetComponent<Rigidbody>();
         Health = MaxHealth = 100;
 
@@ -309,7 +309,10 @@ public class PlayerController : MonoBehaviour
 
     private void StartInvincibilityFrame()
     {
+        // Set flag
         invincibilityFrame = true;
+        // Change alpha of player to indicate being invincible
+        rendererPlayer.material.color -= new Color(1, 1, 1, .5f);
         Invoke("EndInvincibilityFrame", invincibilityTime);
     }
 
@@ -318,8 +321,10 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     private void EndInvincibilityFrame()
     {
-        //boxCollider.enabled = true;
+        // Set flag back
         invincibilityFrame = false;
+        rendererPlayer.material.color += new Color(1, 1, 1, .5f);
+        // Change alpha of player back to normal
     }
     #endregion
 }
