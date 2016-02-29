@@ -24,7 +24,6 @@ public class PlayerController : MonoBehaviour
     private float maxSpeed;
     [SerializeField]
     private float gravityMagnitude;
-    [HideInInspector]
     private bool paused = false;
 
     // Event fired when Health reaches 0
@@ -53,6 +52,8 @@ public class PlayerController : MonoBehaviour
 
     public int MaxHealth { get; protected set; }
     private bool invincibilityFrame = false;
+    [SerializeField]
+    private float invincibilityTime;
 
     private float horizontalAxis, verticalAxis;
     private float horizontalAxisSignInLastFrame = 0;
@@ -70,6 +71,10 @@ public class PlayerController : MonoBehaviour
         boxCollider = GetComponent<BoxCollider>();
         rbd = GetComponent<Rigidbody>();
         Health = MaxHealth = 100;
+
+        // Default invincibility time should be .5 second
+        if (invincibilityTime == 0)
+            invincibilityTime = .5f;
 
         // Instantiate GravityField
         gravityField = new GravityField(transform.position, 500, 20);
@@ -266,15 +271,6 @@ public class PlayerController : MonoBehaviour
     // Collision should happen only with walls, all the other obstacles are triggers
     void OnCollisionEnter(Collision col)
     {
-        if (invincibilityFrame)
-            return;
-
-        Health -= 10;
-        invincibilityFrame = true;
-        // Turn on invincibility frame for .5 sec - disable collider
-        boxCollider.enabled = false;
-        Invoke("EndInvincibilityFrame", .5f);
-
         // If collided with wall apply force aligned with vertical direction of normal of the wall surface
         if (col.transform.tag == "Wall")
         {
@@ -282,6 +278,13 @@ public class PlayerController : MonoBehaviour
             Vector3 bounceForce = new Vector3(10 * Mathf.Sign(colNormal.x), 0, 0);
             rbd.AddForce(bounceForce, ForceMode.VelocityChange);
         }
+
+        // Do not take damage if invincible
+        if (invincibilityFrame)
+            return;
+
+        TakeDamage(10);
+        StartInvincibilityFrame();
     }
 
     // Triggers are all obstacles except walls - hitting trigger obstacle makes player lose velocity
@@ -290,18 +293,24 @@ public class PlayerController : MonoBehaviour
         if (invincibilityFrame)
             return;
 
-
         if (col.tag == "Platform")
         {
-            Health -= 10;
-            invincibilityFrame = true;
-            // Turn on invincibility frame for .5 sec - disable collider
-            boxCollider.enabled = false;
-            Invoke("EndInvincibilityFrame", .5f);
-
+            TakeDamage(10);
+            StartInvincibilityFrame();
             Vector3 bounceForce = new Vector3(0, -10, 0);
             rbd.AddForce(bounceForce, ForceMode.VelocityChange);
         }
+    }
+
+    private void TakeDamage(int damage)
+    {
+        Health -= damage;
+    }
+
+    private void StartInvincibilityFrame()
+    {
+        invincibilityFrame = true;
+        Invoke("EndInvincibilityFrame", invincibilityTime);
     }
 
     /// <summary>
@@ -309,7 +318,7 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     private void EndInvincibilityFrame()
     {
-        boxCollider.enabled = true;
+        //boxCollider.enabled = true;
         invincibilityFrame = false;
     }
     #endregion
