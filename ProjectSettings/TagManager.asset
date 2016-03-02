@@ -7,6 +7,7 @@ TagManager:
   - Trail
   - Wall
   - Platform
+  - CubeObstacle
   layers:
   - Default
   - TransparentFX

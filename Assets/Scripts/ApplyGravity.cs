@@ -10,18 +10,15 @@ public class ApplyGravity : MonoBehaviour
     public GravityField GravityField
     {
         get { return gravityField; }
-        set
-        {
-            gravityField = value;
-            // Set radius of collider that checks if objects should be affected by gravity to value in GravityField
-            GetComponent<SphereCollider>().radius = gravityField.DistanceOfInfluence;
-        }
+        set { gravityField = value; }
     }
 
-    void OnTriggerStay(Collider col)
+    void FixedUpdate()
     {
-        // If object that is on layer GravitySensitive stays in a trigger then apply gravitational force to it's rigidbody
-        if (1 << col.gameObject.layer == gravitySensitive)
+        // LayerMask 1 << 9 is 9th layer mask - which should be GravitySensitive
+        Collider[] collided = Physics.OverlapSphere(gravityField.CenterOfGravity, gravityField.DistanceOfInfluence, 1 << 9);
+
+        foreach (Collider col in collided)
         {
             Rigidbody rbd = col.attachedRigidbody;
             if (rbd != null)

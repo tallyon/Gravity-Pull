@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Assets.Scripts;
 
-public class TrailController : MonoBehaviour, ITrailAdapter
+public class TrailController : MonoBehaviour
 {
     private List<Transform> trailList = new List<Transform>();
     public List<Transform> TrailList
@@ -11,33 +11,9 @@ public class TrailController : MonoBehaviour, ITrailAdapter
         private set { trailList = value; }
     }
 
-    private Transform targetTrailPoint;
-    public Transform TargetTrailPoint
-    {
-        get
-        {
-            return targetTrailPoint;
-        }
+    public Transform TargetTrailPoint { get; set; }
 
-        protected set
-        {
-            targetTrailPoint = value;
-        }
-    }
-
-    private int currentTrailPointIndex = 0;
-    public int CurrentTrailPointIndex
-    {
-        get
-        {
-            return currentTrailPointIndex;
-        }
-
-        protected set
-        {
-            currentTrailPointIndex = value;
-        }
-    }
+    public int CurrentTrailPointIndex { get; set; }
 
     public delegate void OnTrailPointAchieved(int current, int max);
     public static event OnTrailPointAchieved CallOnTrailPointAchieved;
@@ -71,7 +47,7 @@ public class TrailController : MonoBehaviour, ITrailAdapter
         if (cameraFollowScript == null)
             cameraFollowScript = FindObjectOfType<CameraFollowPlayer>();
         GenerateTrailList();
-        currentTrailPointIndex = 0;
+        CurrentTrailPointIndex = 0;
         TrailPointAchieved(TrailList[0]);
         levelTimer = LevelTimer.Instance;
         levelTimer.Start();
@@ -180,7 +156,5 @@ public class TrailController : MonoBehaviour, ITrailAdapter
         // Fire the event that trail was completed
         if (CallOnTrailCompleted != null)
             CallOnTrailCompleted(score);
-
-        //Debug.Log("TRAIL COMPLETED WITH SCORE: " + score.ToString());
     }
 }

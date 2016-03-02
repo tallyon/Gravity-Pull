@@ -10,7 +10,6 @@ public class PlatformController : MonoBehaviour
     private float speed;
     [SerializeField]
     private List<Transform> stops = new List<Transform>();
-    [SerializeField]
     private int index = 0;
     private Vector3 direction;
     [SerializeField]

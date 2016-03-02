@@ -3576,6 +3576,10 @@ Prefab:
       propertyPath: m_RootOrder
       value: 12
       objectReference: {fileID: 0}
+    - target: {fileID: 6532130, guid: 023f5af1ae577554a9cd0f127c164f68, type: 2}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 023f5af1ae577554a9cd0f127c164f68, type: 2}
   m_IsPrefabParent: 0
@@ -3664,11 +3668,11 @@ Prefab:
       objectReference: {fileID: 1299902306}
     - target: {fileID: 22493074, guid: 24f4a683d89791540b315a5c1048fdd6, type: 2}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 22433876, guid: 24f4a683d89791540b315a5c1048fdd6, type: 2}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 11418016, guid: 24f4a683d89791540b315a5c1048fdd6, type: 2}
       propertyPath: healthText
@@ -5495,62 +5499,9 @@ Prefab:
       propertyPath: horizontalVel
       value: 
       objectReference: {fileID: 582177063}
-    - target: {fileID: 2300232, guid: 0ce617f1d96409544962910cb15d9e47, type: 2}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: 234d49fc54c4a9244991469d9b70eb97, type: 2}
-    - target: {fileID: 178568, guid: 0ce617f1d96409544962910cb15d9e47, type: 2}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 10877316, guid: 0ce617f1d96409544962910cb15d9e47, type: 2}
-      propertyPath: m_Intensity
-      value: 1.65
-      objectReference: {fileID: 0}
-    - target: {fileID: 448644, guid: 0ce617f1d96409544962910cb15d9e47, type: 2}
-      propertyPath: m_LocalPosition.z
-      value: -1.09
-      objectReference: {fileID: 0}
-    - target: {fileID: 404426, guid: 0ce617f1d96409544962910cb15d9e47, type: 2}
-      propertyPath: m_LocalScale.x
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 404426, guid: 0ce617f1d96409544962910cb15d9e47, type: 2}
-      propertyPath: m_LocalScale.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 10877316, guid: 0ce617f1d96409544962910cb15d9e47, type: 2}
-      propertyPath: m_Shadows.m_Type
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 10877316, guid: 0ce617f1d96409544962910cb15d9e47, type: 2}
-      propertyPath: m_BounceIntensity
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 10877316, guid: 0ce617f1d96409544962910cb15d9e47, type: 2}
-      propertyPath: m_Lightmapping
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 10877316, guid: 0ce617f1d96409544962910cb15d9e47, type: 2}
-      propertyPath: m_Type
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 11479392, guid: 0ce617f1d96409544962910cb15d9e47, type: 2}
-      propertyPath: invincibilityTime
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 11479392, guid: 0ce617f1d96409544962910cb15d9e47, type: 2}
-      propertyPath: rendererPlayer
-      value: 
-      objectReference: {fileID: 1779381403}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 0ce617f1d96409544962910cb15d9e47, type: 2}
   m_IsPrefabParent: 0
---- !u!23 &1779381403 stripped
-MeshRenderer:
-  m_PrefabParentObject: {fileID: 2300232, guid: 0ce617f1d96409544962910cb15d9e47,
-    type: 2}
-  m_PrefabInternal: {fileID: 1779381402}
 --- !u!4 &1786030318 stripped
 Transform:
   m_PrefabParentObject: {fileID: 400226, guid: 26d576bac515dfe44861f14cb2bba84a, type: 2}

@@ -8,9 +8,7 @@ public class PlayerController : MonoBehaviour
     private Text verticalAcc = null, horizontalAcc = null;
     [SerializeField]
     private Text verticalVel = null, horizontalVel = null;
-
-    //private TrailGeneration trail;
-    //private LineRenderer trajectory;
+    
     private GravityField gravityField;
 
     private Rigidbody rbd;
@@ -65,8 +63,6 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
-        //trail = FindObjectOfType<TrailGeneration>();
-        //trajectory = transform.GetComponentInChildren<LineRenderer>();
         if (rendererPlayer == null)
             rendererPlayer = GameObject.Find("Default").GetComponent<Renderer>();
         rbd = GetComponent<Rigidbody>();
@@ -106,9 +102,6 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
-        // Trajectory
-        //MoveAlongTrajectory();
-
         //************************************************
         // Input handling
 
@@ -121,7 +114,7 @@ public class PlayerController : MonoBehaviour
         {
             // Horizontal dead zone
             if (Mathf.Abs(Input.acceleration.x) > .1f)
-                horizontalAxis = Input.acceleration.x * 4;
+                horizontalAxis = Input.acceleration.x * 6;
 
             // Vertical dead zone
             if (Mathf.Abs(Input.acceleration.y) > .2f)
@@ -238,32 +231,12 @@ public class PlayerController : MonoBehaviour
         rbd.MoveRotation(Quaternion.identity);
     }
 
-    //private void MoveAlongTrajectory(TrailGeneration trail)
-    //{
-    //    //Player movement from one trail point to another
-    //    if (trail.CurrentTrailPointIndex < trail.TrailList.Count - 1)
-    //    {
-    //        Debug.DrawLine(transform.position, transform.position + (trail.TargetTrailPoint.position - transform.position).normalized * 5, Color.red);
-    //        Vector3 moveVector = (trail.TargetTrailPoint.position - transform.position).normalized * speed * Time.deltaTime;
-    //        Vector3 rotatedMoveVector = new Vector3(moveVector.y, -moveVector.x);
-    //        transform.Translate(rotatedMoveVector);
-
-    //        // Set trajectory line renderer to next trail point position
-    //        List<Vector3> trajectoryPositions = new List<Vector3>(3);
-    //        trajectoryPositions.Add(transform.position);
-    //        trajectoryPositions.Add(trail.TrailList[trail.CurrentTrailPointIndex + 1].position);
-    //        if (trail.CurrentTrailPointIndex + 2 < trail.TrailList.Count)
-    //            trajectoryPositions.Add(trail.TrailList[trail.CurrentTrailPointIndex + 2].position);
-    //        else
-    //            trajectoryPositions.Add(trajectoryPositions[1]);
-    //        trajectory.SetPositions(trajectoryPositions.ToArray());
-    //        }
-    //    }
-
-    // Stop player's rigidbody movement after finishing the trail
+    // Stop the game (time) after finishing the trail
     void OnTrailCompleted(ScoreType score)
     {
-        rbd.velocity = Vector3.zero;
+        // If gravity field is active despawn it
+        gravityField.Stop();
+        Time.timeScale = 0;
         paused = true;
     }
 
@@ -293,12 +266,31 @@ public class PlayerController : MonoBehaviour
         if (invincibilityFrame)
             return;
 
-        if (col.tag == "Platform")
+        if (col.CompareTag("Platform") || col.CompareTag("CubeObstacle"))
         {
-            TakeDamage(10);
+            // Take damage
+            if (col.CompareTag("Platform"))
+                TakeDamage(10);
+            else if (col.CompareTag("CubeObstacle"))
+                TakeDamage(5);
             StartInvincibilityFrame();
-            Vector3 bounceForce = new Vector3(0, -10, 0);
+
+            // Apply bounce force - slow player after hitting an obstacle
+            Vector3 normalToObstalce = (transform.position - col.transform.position).normalized;
+            Vector3 bounceForce = new Vector3(Mathf.Sign(normalToObstalce.x) * rbd.velocity.x, -rbd.velocity.y, 0);
             rbd.AddForce(bounceForce, ForceMode.VelocityChange);
+
+            // Fire particle system
+            // Find ParticleSystem in children
+            ParticleSystem particles = col.gameObject.GetComponentInChildren<ParticleSystem>();
+            // Play particle system
+            particles.Play();
+            // Unparent particle system
+            particles.transform.SetParent(null);
+
+            // Deactivate object that was triggered
+            Debug.Log("Destroy");
+            col.gameObject.SetActive(false);
         }
     }
 

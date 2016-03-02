@@ -6,9 +6,6 @@ using UnityEngine.UI;
 /// </summary>
 public class UIBehaviour : MonoBehaviour
 {
-    [SerializeField]
-    private Transform canvas;
-
     void Start()
     {
         gameObject.SetActive(true);
@@ -27,6 +24,8 @@ public class UIBehaviour : MonoBehaviour
         Camera.main.cullingMask = 0;
         gameObject.SetActive(false);
 
+        Time.timeScale = 1;
+
         UnityEngine.SceneManagement.SceneManager.LoadScene(0);
     }
 
@@ -37,6 +36,8 @@ public class UIBehaviour : MonoBehaviour
     {
         // Set position of GameOver UI element to off screen
         transform.FindChild("GameOver").GetComponent<RectTransform>().localPosition = new Vector3(2000, 0, 0);
+
+        Time.timeScale = 1;
 
         // Load current scene to restart level
         UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name,

@@ -4,35 +4,28 @@ namespace Assets.Scripts
 {
     public class GravityField
     {
-        private float magnitude;
         /// <summary>
         /// Corresponds to G * m1 in gravitational attraction formula
         /// </summary>
-        public float Magnitude
-        {
-            get { return magnitude; }
-            protected set { magnitude = value; }
-        }
+        public float Magnitude { get; protected set; }
 
-        private float distanceOfInfluence;
         /// <summary>
         /// Only objects within /DistanceOfInfluence/ of gravitational field will be attracted
         /// </summary>
-        public float DistanceOfInfluence
+        public float DistanceOfInfluence { get; protected set; }
+
+        /// <summary>
+        /// Returns current position of gravity's GameObject
+        /// </summary>
+        public Vector3 CenterOfGravity
         {
-            get { return distanceOfInfluence; }
-            protected set { distanceOfInfluence = value; }
+            get { return GravityGameObject.transform.position; }
         }
 
-        private bool activated;
         /// <summary>
         /// State of gravitational field for input checking
         /// </summary>
-        public bool Activated
-        {
-            get { return activated; }
-            protected set { activated = value; }
-        }
+        public bool Activated { get; protected set; }
 
         private GameObject gravityGameObject;
         public GameObject GravityGameObject

@@ -58,7 +58,6 @@ GameObject:
   - 4: {fileID: 404426}
   - 54: {fileID: 5405020}
   - 65: {fileID: 6534282}
-  - 65: {fileID: 6526696}
   - 114: {fileID: 11479392}
   m_Layer: 0
   m_Name: Player
@@ -118,7 +117,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 178568}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -1.28}
+  m_LocalPosition: {x: 0, y: 0, z: -1.09}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 404426}
@@ -195,18 +194,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 120
   m_CollisionDetection: 0
---- !u!65 &6526696
-BoxCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 162544}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 2, y: 2.3, z: 1}
-  m_Center: {x: 0, y: -0.1, z: 0}
 --- !u!65 &6534282
 BoxCollider:
   m_ObjectHideFlags: 1
@@ -229,12 +216,12 @@ Light:
   serializedVersion: 6
   m_Type: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 1
+  m_Intensity: 1.65
   m_Range: 10
   m_SpotAngle: 10.614295
   m_CookieSize: 10
   m_Shadows:
-    m_Type: 0
+    m_Type: 1
     m_Resolution: -1
     m_Strength: 1
     m_Bias: 0.05
@@ -267,9 +254,11 @@ MonoBehaviour:
   horizontalAcc: {fileID: 0}
   verticalVel: {fileID: 0}
   horizontalVel: {fileID: 0}
+  rendererPlayer: {fileID: 2300232}
   speedModifier: 10
   maxSpeed: 15
   gravityMagnitude: 200
+  invincibilityTime: 1
 --- !u!120 &12044294
 LineRenderer:
   m_ObjectHideFlags: 1
